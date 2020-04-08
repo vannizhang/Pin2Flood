@@ -50,8 +50,6 @@ const PinDropsLayer:React.FC<Props> = ({
 
         const fieldNameForPindropTime = fields[2].fieldName;
 
-        console.log(pastHour)
-
         const defExpForTime = pastHour ? `${fieldNameForPindropTime} > '${getPreviousHourInUTC(pastHour)}'` : null;
 
         return defExpForTime;
@@ -201,10 +199,10 @@ const PinDropsLayer:React.FC<Props> = ({
     };
 
     const refresh = ()=>{
+
         if(pindropsLayer){
             pindropsLayer.definitionExpression = getDefExp();
             pindropsLayer.refresh();
-            // console.log('refreshing pindrops layer', pindropsLayer);
         }
     };
 
@@ -215,7 +213,7 @@ const PinDropsLayer:React.FC<Props> = ({
     }, [mapView]);
 
     React.useEffect(()=>{
-        if(pindropsLayer){
+        if(mapView){
             refresh();
         }
     }, [pastHour]);

@@ -35,6 +35,7 @@ const ControlPanel:React.FC<Props> = ({
                 'width': '350px',
                 'zIndex': 5,
                 'boxShadow': 'rgba(0, 0, 0, 0.2) 0px 2px 6px',
+                'boxSizing': 'border-box'
             }}
         >
             { getTitle() }

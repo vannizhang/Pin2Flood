@@ -40,6 +40,10 @@ const PinDropsTimeSwitcher:React.FC<Props> = ({
                 <div
                     key={`PinDropsTimeSwitcher-Btn-${i}`}
                     className={className}
+                    style={{
+                        'width': '33%',
+                        'textAlign': 'center'
+                    }}
                     onClick={onSelect.bind(this, value)}
                 >
                     {label}
@@ -50,9 +54,16 @@ const PinDropsTimeSwitcher:React.FC<Props> = ({
     };
     
     return (
-        <nav>
-            { getNavBtns() }
-        </nav>
+        <div className='leader-quarter trailer-half'>
+
+            <div className='trailer-quarter phone-hide'>
+                <span className="font-size--2 ">pins for last:</span>
+            </div>
+            
+            <nav>
+                { getNavBtns() }
+            </nav>
+        </div>
     );
 };
 
