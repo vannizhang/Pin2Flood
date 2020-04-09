@@ -5,7 +5,8 @@ import {
     ControlPanel,
     PinDropsLayer,
     PinDropsCandidateLayer,
-    PinDropsTimeSwitcher
+    PinDropsTimeSwitcher,
+    PinDropsEditor
 } from '../';
 
 import {
@@ -21,11 +22,29 @@ import {
     getPreviousHourInUTC
 } from '../../utils/date';
 
+import {
+    pin2Flood
+} from '../../services/Pin2Flood/Pin2Flood';
+
 const App:React.FC = ()=>{
 
     const [ pindropTime, setPindropTime ] = React.useState<string>();
 
-    const [ pinDropCandidate, setPinDropCandidate ] = React.useState<PindropCandiate>();
+    const [ pindropCandidate, setPindropCandidate ] = React.useState<PindropCandiate>();
+
+    const newPindropOnAcceptHandler = async()=>{
+        // console.log('adding new pin drop');
+
+        const { geometry } = pindropCandidate;
+
+        const pin2floodPolygon = await pin2Flood({
+            pindropGeometry: geometry
+        });
+    };
+
+    const newPindropOnRejectHandler = ()=>{
+        setPindropCandidate(null);
+    };
 
     return (
         <>
@@ -39,9 +58,9 @@ const App:React.FC = ()=>{
                 />
 
                 <PinDropsCandidateLayer 
-                    pindropCandidate={pinDropCandidate}
+                    pindropCandidate={pindropCandidate}
                     onSelect={(candidate)=>{
-                        setPinDropCandidate(candidate);
+                        setPindropCandidate(candidate);
                     }}
                 />
             </MapView>
@@ -54,6 +73,13 @@ const App:React.FC = ()=>{
                         const pindropTime = pastHour ? getPreviousHourInUTC(pastHour) : null;
                         setPindropTime(pindropTime);
                     }}
+                />
+
+                <PinDropsEditor 
+                    pindropCandidate={pindropCandidate}
+
+                    newCadidateOnAccept={newPindropOnAcceptHandler}
+                    newCadidateOnReject={newPindropOnRejectHandler}
                 />
             </ControlPanel>
         </>

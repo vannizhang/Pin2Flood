@@ -37,3 +37,19 @@ export const PinDropsLayerConfig = {
         }
     }
 };
+
+export const FloodInnudationPolygonsLayerConfig = {
+    'serviceUrl': 'https://flood.arcgis.com/arcgis/rest/services/NFIE/NWM_Flood_Inundation_Polygons/MapServer/0',
+    'fields': [
+        {
+            "name": "hid",
+            "type": "esriFieldTypeSmallInteger",
+            "alias": "Height Above Nearest Drain (HAND) Identifier Index (1 based)"
+        },
+        {
+            "name": "compositeid",
+            "type": "esriFieldTypeInteger",
+            "alias": "Compsite Lookup Identifier"
+        }
+    ]
+};

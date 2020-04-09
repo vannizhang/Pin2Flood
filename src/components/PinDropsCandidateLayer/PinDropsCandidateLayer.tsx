@@ -72,7 +72,7 @@ const PinDropsEditingLayer:React.FC<Props> = ({
         mapView.graphics.removeAll();
     };
 
-    const getWhere= ()=>{
+    const getWhereClause= ()=>{
         const { fields } = PinDropsLayerConfig;
 
         // add this expression because user can only edit thier own pindrops 
@@ -95,9 +95,9 @@ const PinDropsEditingLayer:React.FC<Props> = ({
 
             const queryParams = pindropsLayer.createQuery();
 
-            queryParams.where = getWhere();
+            queryParams.where = getWhereClause();
             queryParams.geometry = point;
-            queryParams.distance = 5;
+            queryParams.distance = 10;
             queryParams.units = 'meters';
             queryParams.spatialRelationship = "intersects";
     
@@ -128,7 +128,7 @@ const PinDropsEditingLayer:React.FC<Props> = ({
 
         const candidate:PindropCandiate = existingPinDrop || {
             geometry: point,
-            ObjectId: null
+            ObjectId: undefined
         };
 
         onSelect(candidate);
