@@ -4,18 +4,28 @@ import {
     MapView,
     ControlPanel,
     PinDropsLayer,
+    PinDropsEditingLayer,
     PinDropsTimeSwitcher
 } from '../';
+
+import {
+    PindropCandiate
+} from '../PinDropsEditingLayer/PinDropsEditingLayer';
 
 import {
     MapConfig,
     PinDropsLayerConfig
 } from '../../AppConfig';
 
+import {
+    getPreviousHourInUTC
+} from '../../utils/date';
+
 const App:React.FC = ()=>{
 
-    // use the past hour to filter pindrop features added in past hours
-    const [ pastHour, setPastHour ] = React.useState<number>(1);
+    const [ pindropTime, setPindropTime ] = React.useState<string>();
+
+    const [ pinDropCandidate, setPinDropCandidate ] = React.useState<PindropCandiate>();
 
     return (
         <>
@@ -24,8 +34,15 @@ const App:React.FC = ()=>{
             >
                 <PinDropsLayer 
                     itemId={PinDropsLayerConfig.itemID}
-                    pastHour={pastHour}
+                    pindropTime={pindropTime}
                     popupEnabled={false}
+                />
+
+                <PinDropsEditingLayer 
+                    pindropTime={pindropTime}
+                    onSelect={(candidate)=>{
+                        console.log(candidate);
+                    }}
                 />
             </MapView>
 
@@ -33,8 +50,10 @@ const App:React.FC = ()=>{
                 title={'Pin2Flood'}
             >
                 <PinDropsTimeSwitcher 
-                    activeValue={pastHour}
-                    onSelect={setPastHour}
+                    onSelect={(pastHour)=>{
+                        const pindropTime = pastHour ? getPreviousHourInUTC(pastHour) : null;
+                        setPindropTime(pindropTime);
+                    }}
                 />
             </ControlPanel>
         </>

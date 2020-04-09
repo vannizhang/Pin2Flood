@@ -17,22 +17,20 @@ import {
     PinDropsLayerConfig
 } from '../../AppConfig';
 
-import {
-    getPreviousHourInUTC
-} from '../../utils/date';
 
 interface Props {
     itemId: string;
     // use the past hour to filter pindrop features added in past hours
-    pastHour?: number;
+    pindropTime?: string;
     popupEnabled?: boolean;
     mapView?: IMapView;
+    // Refresh interval of the layer in minutes
     refreshInterval?: number;
 };
 
 const PinDropsLayer:React.FC<Props> = ({
     itemId,
-    pastHour,
+    pindropTime,
     popupEnabled,
     mapView,
     refreshInterval
@@ -40,9 +38,7 @@ const PinDropsLayer:React.FC<Props> = ({
 
     const LayerTitle = 'Pin Drops';
 
-    const { esriOAuthUtils } = React.useContext(AppContext);
-
-    const [ pindropsLayer, setPindropsLayer ] = React.useState<IFeatureLayer>();
+    const { userId, pindropsLayer, setPindropsLayer } = React.useContext(AppContext);
 
     const getDefExp = ()=>{
 
@@ -50,7 +46,7 @@ const PinDropsLayer:React.FC<Props> = ({
 
         const fieldNameForPindropTime = fields[2].fieldName;
 
-        const defExpForTime = pastHour ? `${fieldNameForPindropTime} > '${getPreviousHourInUTC(pastHour)}'` : null;
+        const defExpForTime = pindropTime ? `${fieldNameForPindropTime} > '${pindropTime}'` : null;
 
         return defExpForTime;
     };
@@ -62,8 +58,6 @@ const PinDropsLayer:React.FC<Props> = ({
             'esri/renderers/UniqueValueRenderer',
             'esri/symbols/SimpleMarkerSymbol'
         ]) as Promise<Modules>);
-
-        const { id } = esriOAuthUtils.getUserData();
 
         const { fields } = PinDropsLayerConfig;
 
@@ -82,7 +76,7 @@ const PinDropsLayer:React.FC<Props> = ({
             field: fieldNameForUserId,
             uniqueValueInfos: [
                 {
-                    value: id,
+                    value: userId,
                     symbol: new SimpleMarkerSymbol({
                         color: PinDropsLayerConfig.styles["current-user"].color,
                         size: '15px',
@@ -161,7 +155,7 @@ const PinDropsLayer:React.FC<Props> = ({
         return labelClass;
     };
 
-    const init = async()=>{
+    const initPinDropsLayer = async()=>{
 
         type Modules = [typeof IFeatureLayer];
 
@@ -176,7 +170,7 @@ const PinDropsLayer:React.FC<Props> = ({
 
             const definitionExpression = getDefExp();
 
-            const pindropLayer = new FeatureLayer({
+            const layer = new FeatureLayer({
                 title: LayerTitle,
                 portalItem: {  // autocasts as new PortalItem()
                     id: itemId
@@ -189,9 +183,9 @@ const PinDropsLayer:React.FC<Props> = ({
                 refreshInterval
             });
 
-            mapView.map.add(pindropLayer);
+            mapView.map.add(layer);
 
-            setPindropsLayer(pindropLayer);
+            setPindropsLayer(layer);
 
         } catch(err){   
             console.error(err);
@@ -199,7 +193,6 @@ const PinDropsLayer:React.FC<Props> = ({
     };
 
     const refresh = ()=>{
-
         if(pindropsLayer){
             pindropsLayer.definitionExpression = getDefExp();
             pindropsLayer.refresh();
@@ -208,7 +201,7 @@ const PinDropsLayer:React.FC<Props> = ({
 
     React.useEffect(()=>{
         if(mapView){
-            init();
+            initPinDropsLayer();
         }
     }, [mapView]);
 
@@ -216,7 +209,7 @@ const PinDropsLayer:React.FC<Props> = ({
         if(mapView){
             refresh();
         }
-    }, [pastHour]);
+    }, [pindropTime]);
 
     return null;
 };

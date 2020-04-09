@@ -2,7 +2,6 @@ import * as React from 'react';
 import classnames from 'classnames';
 
 interface Props {
-    activeValue: number;
     onSelect: (val?:number)=>void;
 }
 
@@ -22,9 +21,11 @@ const TimeSwitcherData = [
 ];
 
 const PinDropsTimeSwitcher:React.FC<Props> = ({
-    activeValue,
     onSelect
 })=>{
+
+    // use the past hour to filter pindrop features added in past hours
+    const [ pastHour, setPastHour ] = React.useState<number>(1);
 
     const getNavBtns = ()=>{
 
@@ -33,7 +34,7 @@ const PinDropsTimeSwitcher:React.FC<Props> = ({
             const { label, value } = d;
 
             const className = classnames('btn btn-grouped', {
-                'btn-clear': value !== activeValue
+                'btn-clear': value !== pastHour
             });
 
             return (
@@ -44,7 +45,7 @@ const PinDropsTimeSwitcher:React.FC<Props> = ({
                         'width': '33%',
                         'textAlign': 'center'
                     }}
-                    onClick={onSelect.bind(this, value)}
+                    onClick={setPastHour.bind(this, value)}
                 >
                     {label}
                 </div>
@@ -52,6 +53,10 @@ const PinDropsTimeSwitcher:React.FC<Props> = ({
         });
 
     };
+
+    React.useEffect(()=>{
+        onSelect(pastHour);
+    }, [pastHour]);
     
     return (
         <div className='leader-quarter trailer-half'>
