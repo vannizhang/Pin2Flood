@@ -16,7 +16,7 @@ export { default as PinDropsTimeSwitcher } from './PinDropsTimeSwitcher/PinDrops
 
 export { default as ControlPanel } from './ControlPanel/ControlPanel';
 
-export { default as PinDropsEditingLayer } from './PinDropsEditingLayer/PinDropsEditingLayer';
+export { default as PinDropsCandidateLayer } from './PinDropsCandidateLayer/PinDropsCandidateLayer';
 
 
 // export { default as  } from './';

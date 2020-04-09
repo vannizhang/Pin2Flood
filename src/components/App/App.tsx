@@ -4,13 +4,13 @@ import {
     MapView,
     ControlPanel,
     PinDropsLayer,
-    PinDropsEditingLayer,
+    PinDropsCandidateLayer,
     PinDropsTimeSwitcher
 } from '../';
 
 import {
     PindropCandiate
-} from '../PinDropsEditingLayer/PinDropsEditingLayer';
+} from '../PinDropsCandidateLayer/PinDropsCandidateLayer';
 
 import {
     MapConfig,
@@ -38,10 +38,10 @@ const App:React.FC = ()=>{
                     popupEnabled={false}
                 />
 
-                <PinDropsEditingLayer 
-                    pindropTime={pindropTime}
+                <PinDropsCandidateLayer 
+                    pindropCandidate={pinDropCandidate}
                     onSelect={(candidate)=>{
-                        console.log(candidate);
+                        setPinDropCandidate(candidate);
                     }}
                 />
             </MapView>
