@@ -3,9 +3,16 @@ import * as React from 'react';
 import EsriOAuth from '../utils/Esri-OAuth/EsriOAuth';
 import IFeatureLayer from 'esri/layers/FeatureLayer';
 
+interface UserData {
+    name: string;
+    id: string;
+    customHostUrl: string;
+    group: string
+}
+
 interface ContextProps {
     esriOAuthUtils: EsriOAuth;
-    userId: string;
+    userData: UserData;
 
     pindropsLayer: IFeatureLayer;
     setPindropsLayer: (layer:IFeatureLayer)=>void;
@@ -13,22 +20,22 @@ interface ContextProps {
 
 interface AppContextProviderProps {
     esriOAuthUtils: EsriOAuth;
+    userData: UserData;
 };
 
 export const AppContext = React.createContext<ContextProps>(null);
 
 export const AppContextProvider:React.FC<AppContextProviderProps> = ({ 
     esriOAuthUtils,
+    userData,
     children 
 })=>{
 
     const [ pindropsLayer, setPindropsLayer ] = React.useState<IFeatureLayer>()
 
-    const userData = esriOAuthUtils.getUserData();
-
     const value = {
         esriOAuthUtils,
-        userId: userData.id,
+        userData,
 
         pindropsLayer,
         setPindropsLayer

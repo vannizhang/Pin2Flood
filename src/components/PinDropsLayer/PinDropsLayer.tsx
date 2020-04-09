@@ -38,7 +38,7 @@ const PinDropsLayer:React.FC<Props> = ({
 
     const LayerTitle = 'Pin Drops';
 
-    const { userId, pindropsLayer, setPindropsLayer } = React.useContext(AppContext);
+    const { userData, pindropsLayer, setPindropsLayer } = React.useContext(AppContext);
 
     const getDefExp = ()=>{
 
@@ -76,7 +76,7 @@ const PinDropsLayer:React.FC<Props> = ({
             field: fieldNameForUserId,
             uniqueValueInfos: [
                 {
-                    value: userId,
+                    value: userData.id,
                     symbol: new SimpleMarkerSymbol({
                         color: PinDropsLayerConfig.styles["current-user"].color,
                         size: '15px',

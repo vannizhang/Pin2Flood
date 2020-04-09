@@ -8,7 +8,16 @@ import {
 
 interface Pin2FloodPolygonFeature {
     geometry?: IPolygon;
-    attributes: any;
+    attributes: {
+        objectid: number;
+        streamid: number;
+        hid: number;
+        compositeid: number;
+        h: number;
+        maxq: number;
+        resolution: number;
+        hucid: string;
+    };
 };
 
 interface pin2floodOptions {

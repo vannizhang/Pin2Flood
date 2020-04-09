@@ -5,6 +5,8 @@ import * as ReactDOM from 'react-dom';
 
 import { setDefaultOptions } from 'esri-loader';
 
+import { urlFns } from 'helper-toolkit-ts';
+
 import EsriOAuth from './utils/Esri-OAuth/EsriOAuth';
 
 import {
@@ -16,8 +18,13 @@ import {
 } from './components';
 
 import {
-    Config
+    Config,
+    PinDropsLayerConfig
 } from './AppConfig';
+
+import { 
+    getAgolItemData
+} from './services/arcgis-online-item-data/agolItemData';
 
 const init = async()=>{
 
@@ -26,22 +33,73 @@ const init = async()=>{
         version: '4.15' 
     });
 
-    const esriOAuthUtils = new EsriOAuth({
-        appId: Config["app-id"]
-    });
-    
-    await esriOAuthUtils.init();
+    const searchParams = urlFns.parseQuery();
 
-    ReactDOM.render(
-        (
-            <AppContextProvider
-                esriOAuthUtils={esriOAuthUtils}
-            >
-                <App />
-            </AppContextProvider>
-        ), 
-        document.getElementById('root')
-    );
+    const customAppId = searchParams.appId;
+    const esriOAuthUtils = new EsriOAuth({
+        appId: customAppId || Config["app-id"]
+    });
+
+    try {
+        // sign in and get user data and credentials
+        const { credential } = await esriOAuthUtils.init();
+        const { token } = credential;
+        // console.log(credential, credential.token);
+    
+        const userData = esriOAuthUtils.getUserData();
+        const { customHostUrl } = userData;
+        // console.log('userData', userData);
+        
+        // check custom Item Ids for Pindrops Layer and Pin2Flood Polygons layer from search params 
+        const customPindropsLayerId = searchParams.pindropsItemId;
+        const customPin2FloodPolygonsLayerId = searchParams.floodPolygonsItemId;
+
+        const customPindropsLayer = customPindropsLayerId
+            ? await getAgolItemData({
+                itemId: customPindropsLayerId,
+                token,
+                customHostUrl
+            }) : null;
+        // console.log(customPindropsLayer);
+        
+        const pindropsLayerInfo = {
+            itemId: customPindropsLayer ? customPindropsLayer.id : PinDropsLayerConfig.itemID,
+            serviceUrl: customPindropsLayer ? customPindropsLayer.url + '/0' : PinDropsLayerConfig.serviceUrl
+        };
+    
+        const customPin2FloodPolygonsLayer = customPin2FloodPolygonsLayerId
+            ? await getAgolItemData({
+                itemId: customPin2FloodPolygonsLayerId,
+                token,
+                customHostUrl
+            }) : null;
+        // console.log(customPin2FloodPolygonsLayer);
+
+        const pin2floodPolygonsLayerInfo = {
+            itemId: customPin2FloodPolygonsLayer ? customPin2FloodPolygonsLayer.itemId : '',
+            serviceUrl: customPin2FloodPolygonsLayer ? customPin2FloodPolygonsLayer.url + '/0' : ''
+        };
+    
+        ReactDOM.render(
+            (
+                <AppContextProvider
+                    esriOAuthUtils={esriOAuthUtils}
+                    userData={userData}
+                >
+                    <App 
+                        pindropsLayerInfo={pindropsLayerInfo}
+                        pin2floodPolygonsLayerInfo={pin2floodPolygonsLayerInfo}
+                        token={token}
+                    />
+                </AppContextProvider>
+            ), 
+            document.getElementById('root')
+        );
+
+    } catch(err){
+        console.error(err);
+    }
+
 };
 
 init();

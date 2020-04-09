@@ -33,7 +33,7 @@ const PinDropsEditingLayer:React.FC<Props> = ({
     onSelect
 })=>{
 
-    const { userId, pindropsLayer } = React.useContext(AppContext);
+    const { userData, pindropsLayer } = React.useContext(AppContext);
 
     const showPindropCandidate = async(candidate:PindropCandiate)=>{
 
@@ -77,7 +77,7 @@ const PinDropsEditingLayer:React.FC<Props> = ({
 
         // add this expression because user can only edit thier own pindrops 
         const fieldNameForUserId = fields[0].fieldName;
-        const userIdDefExp = `${fieldNameForUserId}='${userId}'`;
+        const userIdDefExp = `${fieldNameForUserId}='${userData.id}'`;
 
         const pindropsLayerDefExp = pindropsLayer.definitionExpression;
         

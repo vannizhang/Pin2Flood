@@ -58,7 +58,6 @@ export default class OAuthUtils {
             const credential: ICredential = await this.esriId.checkSignInStatus(
                 this.oauthInfo.portalUrl + '/sharing'
             );
-            // console.log(credential);
 
             // init paortal
             this.userPortal = new Portal({ url: this.portalUrl });
@@ -86,7 +85,7 @@ export default class OAuthUtils {
         this.esriId
             .getCredential(this.oauthInfo.portalUrl + '/sharing')
             .then((res: ICredential) => {
-                console.log('signed in as', res.userId);
+                console.log('signed in', res);
             });
     };
 
@@ -101,7 +100,7 @@ export default class OAuthUtils {
             return null;
         }
 
-        const { user, name } = this.userPortal;
+        const { user, name, urlKey, customBaseUrl } = this.userPortal;
         
         const { 
             fullName,
@@ -117,7 +116,8 @@ export default class OAuthUtils {
             // 	group: 'Riverside City Mgmt.',
             group: name,
             // 	image: '//placehold.it/300x300'
-            image: thumbnailUrl
-        }
-    }
+            image: thumbnailUrl,
+            customHostUrl: `https://${urlKey}.${customBaseUrl}`
+        };
+    };
 }
