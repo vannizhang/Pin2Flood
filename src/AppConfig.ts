@@ -38,6 +38,33 @@ export const PinDropsLayerConfig = {
     }
 };
 
+export const Pin2FloodPolygonsLayerConfig = {
+    'itemID': 'cbbd8084f50c42aa9c69f63b4d113015',
+    'serviceUrl': 'https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/Pin2FloodPolygons/FeatureServer/0',
+    'fields': [
+        {
+            'fieldName': 'userid',
+            'displayName': 'User ID'
+        },
+        {
+            'fieldName': 'fullname',
+            'displayName': 'User Full Name'
+        },
+        {
+            'fieldName': 'pindrop_id',
+            'displayName': 'Pindrop ID'
+        },
+        {
+            'fieldName': 'pin_drop_time',
+            'displayName': 'Pindrop Time'
+        },
+        {
+            'fieldName': 'compositeid',
+            'displayName': 'Composite ID'
+        },
+    ],
+};
+
 export const FloodInnudationPolygonsLayerConfig = {
     'serviceUrl': 'https://flood.arcgis.com/arcgis/rest/services/NFIE/NWM_Flood_Inundation_Polygons/MapServer/0',
     'fields': [

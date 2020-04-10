@@ -16,6 +16,7 @@ interface savePindropOptions {
         userId: string;
         userFullName: string;
         compositeId?: number;
+        pindropTime: number;
     }
 }
 
@@ -39,9 +40,7 @@ export const savePindrop = async({
     
     const { serviceUrl, token } = Config;
 
-    const { userId, userFullName, compositeId } = attributes;
-
-    const pindropTime = new Date().getTime();
+    const { userId, userFullName, compositeId, pindropTime } = attributes;
 
     const { fields } = PinDropsLayerConfig;
 

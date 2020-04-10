@@ -1,13 +1,13 @@
 import axios from 'axios';
 import IPoint from 'esri/geometry/Point';
-import IPolygon from 'esri/geometry/Polygon';
+// import IPolygon from 'esri/geometry/Polygon';
 
 import {
     FloodInnudationPolygonsLayerConfig
 } from '../../AppConfig';
 
 interface Pin2FloodPolygonFeature {
-    geometry?: IPolygon;
+    geometry?: Object;
     attributes: {
         objectid: number;
         streamid: number;

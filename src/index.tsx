@@ -19,7 +19,8 @@ import {
 
 import {
     Config,
-    PinDropsLayerConfig
+    PinDropsLayerConfig,
+    Pin2FloodPolygonsLayerConfig
 } from './AppConfig';
 
 import { 
@@ -63,8 +64,13 @@ const init = async()=>{
         // console.log(customPindropsLayer);
         
         const pindropsLayerInfo = {
-            itemId: customPindropsLayer ? customPindropsLayer.id : PinDropsLayerConfig.itemID,
-            serviceUrl: customPindropsLayer ? customPindropsLayer.url + '/0' : PinDropsLayerConfig.serviceUrl
+            itemId: customPindropsLayer 
+                ? customPindropsLayer.id 
+                : PinDropsLayerConfig.itemID,
+
+            serviceUrl: customPindropsLayer 
+                ? customPindropsLayer.url + '/0' 
+                : PinDropsLayerConfig.serviceUrl
         };
     
         const customPin2FloodPolygonsLayer = customPin2FloodPolygonsLayerId
@@ -76,8 +82,14 @@ const init = async()=>{
         // console.log(customPin2FloodPolygonsLayer);
 
         const pin2floodPolygonsLayerInfo = {
-            itemId: customPin2FloodPolygonsLayer ? customPin2FloodPolygonsLayer.itemId : '',
-            serviceUrl: customPin2FloodPolygonsLayer ? customPin2FloodPolygonsLayer.url + '/0' : ''
+
+            itemId: customPin2FloodPolygonsLayer 
+                ? customPin2FloodPolygonsLayer.itemId 
+                : Pin2FloodPolygonsLayerConfig.itemID,
+
+            serviceUrl: customPin2FloodPolygonsLayer 
+                ? customPin2FloodPolygonsLayer.url + '/0' 
+                : Pin2FloodPolygonsLayerConfig.serviceUrl
         };
     
         ReactDOM.render(

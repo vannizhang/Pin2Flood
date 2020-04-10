@@ -17,11 +17,14 @@ import {
     PinDropsLayerConfig
 } from '../../AppConfig';
 
+import {
+    getPreviousHourInUTC
+} from '../../utils/date';
 
 interface Props {
     itemId: string;
     // use the past hour to filter pindrop features added in past hours
-    pindropTime?: string;
+    pastHour?: number;
     popupEnabled?: boolean;
     mapView?: IMapView;
     // Refresh interval of the layer in minutes
@@ -30,7 +33,7 @@ interface Props {
 
 const PinDropsLayer:React.FC<Props> = ({
     itemId,
-    pindropTime,
+    pastHour,
     popupEnabled,
     mapView,
     refreshInterval
@@ -46,7 +49,7 @@ const PinDropsLayer:React.FC<Props> = ({
 
         const fieldNameForPindropTime = fields[2].fieldName;
 
-        const defExpForTime = pindropTime ? `${fieldNameForPindropTime} > '${pindropTime}'` : null;
+        const defExpForTime = pastHour ? `${fieldNameForPindropTime} > '${getPreviousHourInUTC(pastHour)}'` : null;
 
         return defExpForTime;
     };
@@ -209,7 +212,7 @@ const PinDropsLayer:React.FC<Props> = ({
         if(mapView){
             refresh();
         }
-    }, [pindropTime]);
+    }, [pastHour]);
 
     return null;
 };

@@ -23,10 +23,6 @@ import {
 } from '../../AppConfig';
 
 import {
-    getPreviousHourInUTC
-} from '../../utils/date';
-
-import {
     pin2Flood
 } from '../../services/pin2flood-task/pin2floodTask';
 
@@ -34,6 +30,11 @@ import {
     savePindrop,
     setPindropsLayerConfig
 } from '../../services/pindrops-layer/pindropsLayer';
+
+import {
+    savePin2FloodPolygon,
+    setPin2FloodPolygonsLayerConfig
+} from '../../services/pin2flood-polygons-layer/pin2floodPolygonsLayer';
 
 interface LayerInfo {
     itemId: string;
@@ -54,7 +55,7 @@ const App:React.FC<Props> = ({
 
     const { userData } = React.useContext(AppContext);
 
-    const [ pindropTime, setPindropTime ] = React.useState<string>();
+    const [ pastHour, setPastHour ] = React.useState<number>();
 
     const [ pindropCandidate, setPindropCandidate ] = React.useState<PindropCandiate>();
 
@@ -63,37 +64,62 @@ const App:React.FC<Props> = ({
     const newPindropOnAcceptHandler = async()=>{
         // console.log('adding new pin drop');
 
-        const { geometry } = pindropCandidate;
+        try {
+            const { geometry } = pindropCandidate;
 
-        const pin2floodPolygon = await pin2Flood({
-            pindropGeometry: geometry
-        });
+            const pin2floodPolygon = await pin2Flood({
+                pindropGeometry: geometry
+            });
+            // console.log(pin2floodPolygon);
+    
+            const { id, name } = userData;
+    
+            const pindropTime = new Date().getTime();
+    
+            const savePindropResponse = await savePindrop({
+                pindropGeometry: geometry,
+                attributes: {
+                    userId: id,
+                    userFullName: name,
+                    compositeId: pin2floodPolygon.attributes.compositeid,
+                    pindropTime
+                }
+            });
+            // console.log(savePindropResponse);
+    
+            const savePin2FloodPolygonResponse = await savePin2FloodPolygon({
+                geometry: pin2floodPolygon.geometry,
+                attributes: {
+                    userId: id,
+                    userFullName: name,
+                    compositeId: pin2floodPolygon.attributes.compositeid,
+                    pindropId: savePindropResponse.objectId,
+                    pindropTime
+                }
+            });
+            // console.log(savePin2FloodPolygonResponse);
 
-        const savePindropResponse = await savePindrop({
-            pindropGeometry: geometry,
-            attributes: {
-                userId: userData.id,
-                userFullName: userData.name,
-                compositeId: pin2floodPolygon.attributes.compositeid
-            }
-        });
-
+        } catch(err){
+            console.error(err);
+        }
 
         setPindropCandidate(null);
+        setIsRunningPin2FloodTask(false);
     };
 
     const newPindropOnRejectHandler = ()=>{
         setPindropCandidate(null);
     };
 
-    const toggleIsRunningPin2FloodTask = ()=>{
-        setIsRunningPin2FloodTask(!isRunningPin2FloodTask);
-    }
-
     React.useEffect(()=>{
         // console.log(pindropsLayerInfo, token)
         setPindropsLayerConfig({
             serviceUrl: pindropsLayerInfo.serviceUrl,
+            token
+        });
+
+        setPin2FloodPolygonsLayerConfig({
+            serviceUrl: pin2floodPolygonsLayerInfo.serviceUrl,
             token
         });
 
@@ -106,7 +132,7 @@ const App:React.FC<Props> = ({
             >
                 <PinDropsLayer 
                     itemId={pindropsLayerInfo.itemId}
-                    pindropTime={pindropTime}
+                    pastHour={pastHour}
                     popupEnabled={false}
                 />
 
@@ -122,10 +148,7 @@ const App:React.FC<Props> = ({
                 title={'Pin2Flood'}
             >
                 <PinDropsTimeSwitcher 
-                    onSelect={(pastHour)=>{
-                        const pindropTime = pastHour ? getPreviousHourInUTC(pastHour) : null;
-                        setPindropTime(pindropTime);
-                    }}
+                    onSelect={setPastHour}
                 />
 
                 <PinDropsEditor 
