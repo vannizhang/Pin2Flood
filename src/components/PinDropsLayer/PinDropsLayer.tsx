@@ -21,6 +21,11 @@ import {
     getPreviousHourInUTC
 } from '../../utils/date';
 
+export interface PindropFeature {
+    compositeId: number;
+    userId: string;
+}
+
 interface Props {
     itemId: string;
     // use the past hour to filter pindrop features added in past hours
@@ -29,6 +34,10 @@ interface Props {
     mapView?: IMapView;
     // Refresh interval of the layer in minutes
     refreshInterval?: number;
+    shouldRefresh?: boolean;
+
+    // call this method after the layer is added/refreshed on map to get list of composite Ids from pindrops visible on map 
+    onUpdateEnd?: (compositeIds: PindropFeature[])=>void;
 };
 
 const PinDropsLayer:React.FC<Props> = ({
@@ -36,7 +45,10 @@ const PinDropsLayer:React.FC<Props> = ({
     pastHour,
     popupEnabled,
     mapView,
-    refreshInterval
+    refreshInterval,
+    shouldRefresh,
+
+    onUpdateEnd
 })=>{
 
     const LayerTitle = 'Pin Drops';
@@ -186,8 +198,6 @@ const PinDropsLayer:React.FC<Props> = ({
                 refreshInterval
             });
 
-            mapView.map.add(layer);
-
             setPindropsLayer(layer);
 
         } catch(err){   
@@ -195,10 +205,35 @@ const PinDropsLayer:React.FC<Props> = ({
         }
     };
 
+    // query pindrops layer to get all visible features
+    const fetchPindrops = async()=>{
+        const queryParams = pindropsLayer.createQuery();
+
+        const { features } = await pindropsLayer.queryFeatures(queryParams);
+
+        const { fields } = PinDropsLayerConfig;
+
+        const fieldNameForUserId = fields[0].fieldName;
+        const fieldNameForCompositeId = fields[3].fieldName;
+
+        const pindropFeatures: PindropFeature[] = features && features.length 
+            ? features.map(feature=>{
+                return {
+                    userId: feature.attributes[fieldNameForUserId],
+                    compositeId: feature.attributes[fieldNameForCompositeId]
+                };
+            }) 
+            : []
+
+        onUpdateEnd(pindropFeatures);
+    };
+
     const refresh = ()=>{
         if(pindropsLayer){
             pindropsLayer.definitionExpression = getDefExp();
             pindropsLayer.refresh();
+
+            fetchPindrops();
         }
     };
 
@@ -209,10 +244,24 @@ const PinDropsLayer:React.FC<Props> = ({
     }, [mapView]);
 
     React.useEffect(()=>{
+        if(pindropsLayer){
+            mapView.map.add(pindropsLayer);
+
+            fetchPindrops();
+        }
+    }, [pindropsLayer]);
+
+    React.useEffect(()=>{
         if(mapView){
             refresh();
         }
     }, [pastHour]);
+
+    React.useEffect(()=>{
+        if(shouldRefresh){
+            refresh();
+        }
+    }, [ shouldRefresh ]);
 
     return null;
 };

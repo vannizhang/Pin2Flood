@@ -10,8 +10,13 @@ import {
     PinDropsLayer,
     PinDropsCandidateLayer,
     PinDropsTimeSwitcher,
-    PinDropsEditor
+    PinDropsEditor,
+    Pin2FloodPolygonsLayer
 } from '../';
+
+import {
+    PindropFeature
+} from '../PinDropsLayer/PinDropsLayer';
 
 import {
     PindropCandiate
@@ -19,7 +24,6 @@ import {
 
 import {
     MapConfig,
-    PinDropsLayerConfig
 } from '../../AppConfig';
 
 import {
@@ -59,10 +63,15 @@ const App:React.FC<Props> = ({
 
     const [ pindropCandidate, setPindropCandidate ] = React.useState<PindropCandiate>();
 
+    // active pindrop features that are currently visible on map 
+    const [ pindropFeatures, setPindropFeatures ] = React.useState<PindropFeature[]>([]);
+
     const [ isRunningPin2FloodTask, setIsRunningPin2FloodTask ] = React.useState<boolean>(false);
 
     const newPindropOnAcceptHandler = async()=>{
         // console.log('adding new pin drop');
+
+        setIsRunningPin2FloodTask(true);
 
         try {
             const { geometry } = pindropCandidate;
@@ -130,11 +139,6 @@ const App:React.FC<Props> = ({
             <MapView
                 webmapId={MapConfig["web-map-id"]}
             >
-                <PinDropsLayer 
-                    itemId={pindropsLayerInfo.itemId}
-                    pastHour={pastHour}
-                    popupEnabled={false}
-                />
 
                 <PinDropsCandidateLayer 
                     pindropCandidate={pindropCandidate}
@@ -142,6 +146,20 @@ const App:React.FC<Props> = ({
                         setPindropCandidate(candidate);
                     }}
                 />
+
+                <Pin2FloodPolygonsLayer
+                    pindropFeatures={pindropFeatures}
+                    layerTitle={'Pin to Flood'}
+                />
+
+                <PinDropsLayer 
+                    itemId={pindropsLayerInfo.itemId}
+                    pastHour={pastHour}
+                    popupEnabled={false}
+                    shouldRefresh={!isRunningPin2FloodTask}
+                    onUpdateEnd={setPindropFeatures}
+                />
+
             </MapView>
 
             <ControlPanel 
