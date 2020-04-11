@@ -80,3 +80,24 @@ export const FloodInnudationPolygonsLayerConfig = {
         }
     ]
 };
+
+export const NationalWaterModelFloodPolysConfig = {
+    "serviceUrl": "https://flood.arcgis.com/arcgis/rest/services/NFIE/NationalWaterModel_FloodPolys_Short/MapServer/0",
+    'fields': [
+        {
+            "name": "egdb.dbo.short_term_current.hid",
+            "type": "esriFieldTypeSmallInteger",
+            "alias": "hid"
+        },
+        {
+            "name": "egdb.dbo.FloodPolygons.compositeid",
+            "type": "esriFieldTypeInteger",
+            "alias": "Compsite Lookup Identifier"
+        },
+        {
+            "name": "egdb.dbo.FloodPolygons.streamid",
+            "type": "esriFieldTypeInteger",
+            "alias": "Stream Hydrologic Identifier"
+        },
+    ]
+}

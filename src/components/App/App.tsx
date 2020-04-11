@@ -11,7 +11,8 @@ import {
     PinDropsCandidateLayer,
     PinDropsTimeSwitcher,
     PinDropsEditor,
-    Pin2FloodPolygonsLayer
+    Pin2FloodPolygonsLayer,
+    MaxPredictionLayer
 } from '../';
 
 import {
@@ -146,6 +147,8 @@ const App:React.FC<Props> = ({
                         setPindropCandidate(candidate);
                     }}
                 />
+
+                <MaxPredictionLayer />
 
                 <Pin2FloodPolygonsLayer
                     pindropFeatures={pindropFeatures}

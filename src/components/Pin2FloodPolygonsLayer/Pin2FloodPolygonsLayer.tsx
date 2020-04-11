@@ -17,7 +17,6 @@ import {
 import {
     FloodInnudationPolygonsLayerConfig
 } from '../../AppConfig';
-import { render } from 'react-dom';
 
 interface Props {
     pindropFeatures: PindropFeature[];
