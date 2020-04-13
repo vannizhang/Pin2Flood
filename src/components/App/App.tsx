@@ -12,7 +12,8 @@ import {
     PinDropsTimeSwitcher,
     PinDropsEditor,
     Pin2FloodPolygonsLayer,
-    MaxPredictionLayer
+    MaxPredictionLayer,
+    ToggleSwitch
 } from '../';
 
 import {
@@ -66,6 +67,10 @@ const App:React.FC<Props> = ({
 
     // active pindrop features that are currently visible on map 
     const [ pindropFeatures, setPindropFeatures ] = React.useState<PindropFeature[]>([]);
+
+    const [ isPredictionLayerVisible, setIsPredictionLayerVisible ] = React.useState<boolean>(false);
+
+    const [ isMaxPredictionLayerVisible, setIsMaxPredictionLayerVisible ] = React.useState<boolean>(false);
 
     const [ isRunningPin2FloodTask, setIsRunningPin2FloodTask ] = React.useState<boolean>(false);
 
@@ -148,7 +153,9 @@ const App:React.FC<Props> = ({
                     }}
                 />
 
-                <MaxPredictionLayer />
+                <MaxPredictionLayer 
+                    isVisible={isMaxPredictionLayerVisible}
+                />
 
                 <Pin2FloodPolygonsLayer
                     pindropFeatures={pindropFeatures}
@@ -178,6 +185,19 @@ const App:React.FC<Props> = ({
                     newCadidateOnAccept={newPindropOnAcceptHandler}
                     newCadidateOnReject={newPindropOnRejectHandler}
                 />
+
+                <ToggleSwitch 
+                    label={'Current Condition'}
+                    defaultValue={isPredictionLayerVisible}
+                    onChange={setIsPredictionLayerVisible}
+                />
+
+                <ToggleSwitch 
+                    label={'36 Hours Max Prediction'}
+                    defaultValue={isMaxPredictionLayerVisible}
+                    onChange={setIsMaxPredictionLayerVisible}
+                />
+
             </ControlPanel>
         </>
     );

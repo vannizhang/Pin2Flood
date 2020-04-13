@@ -18,5 +18,6 @@ export { default as ControlPanel } from './ControlPanel/ControlPanel';
 
 export { default as PinDropsCandidateLayer } from './PinDropsCandidateLayer/PinDropsCandidateLayer';
 
+export { default as ToggleSwitch } from './ToggleSwitch/ToggleSwitch';
 
 // export { default as  } from './';

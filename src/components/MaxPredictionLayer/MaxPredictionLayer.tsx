@@ -17,10 +17,12 @@ import {
 } from '../../services/max-flood-prediction/maxFloodPredictionPolygons';
 
 interface Props {
+    isVisible: boolean;
     mapView?: IMapView;
 };
 
 const MaxPredictionLayer:React.FC<Props> = ({
+    isVisible,
     mapView
 })=>{
 
@@ -77,7 +79,7 @@ const MaxPredictionLayer:React.FC<Props> = ({
     
             setCompositeIds(compositeIds);
 
-        }, 350);
+        }, 500);
     }
 
     const initEventListener = async()=>{
@@ -117,6 +119,7 @@ const MaxPredictionLayer:React.FC<Props> = ({
                 url: serviceUrl,
                 definitionExpression,
                 renderer,
+                visible: isVisible
             });
 
             mapView.map.add(layer, 0);
@@ -130,6 +133,7 @@ const MaxPredictionLayer:React.FC<Props> = ({
 
     const refresh = ()=>{
         if(maxPredictionLayer){
+            maxPredictionLayer.visible = isVisible;
             maxPredictionLayer.definitionExpression = getDefExp();
             maxPredictionLayer.refresh();
         }
@@ -152,7 +156,7 @@ const MaxPredictionLayer:React.FC<Props> = ({
 
     React.useEffect(()=>{
         refresh();
-    }, [ compositeIds ]);
+    }, [ compositeIds, isVisible ]);
 
     return null;
 };
