@@ -24,6 +24,9 @@ const MaxPredictionLayer:React.FC<Props> = ({
     mapView
 })=>{
 
+
+    let queryDelay: NodeJS.Timeout = null;
+
     const LayerTitle = 'Max Predictions';
 
     const [ maxPredictionLayer, setMaxPredictionLayer ] = React.useState<IFeatureLayer>()
@@ -66,11 +69,15 @@ const MaxPredictionLayer:React.FC<Props> = ({
     };
 
     const fetchMaxPredictionPolygons = async()=>{
-        const compositeIds = await fetchCompositeIds4MaxFloodPredictionPolygons({
-            mapExtent: mapView.extent
-        });
 
-        setCompositeIds(compositeIds);
+        queryDelay = global.setTimeout(async()=>{
+            const compositeIds = await fetchCompositeIds4MaxFloodPredictionPolygons({
+                mapExtent: mapView.extent
+            });
+    
+            setCompositeIds(compositeIds);
+
+        }, 350);
     }
 
     const initEventListener = async()=>{
@@ -80,6 +87,11 @@ const MaxPredictionLayer:React.FC<Props> = ({
         const [ watchUtils ] = await (loadModules([
             'esri/core/watchUtils'
         ]) as Promise<Modules>);
+
+        watchUtils.whenFalse(mapView, 'stationary', ()=>{
+            // console.log('mapView is updating');
+            clearTimeout(queryDelay);
+        });
 
         watchUtils.whenTrue(mapView, 'stationary', ()=>{
             fetchMaxPredictionPolygons()
