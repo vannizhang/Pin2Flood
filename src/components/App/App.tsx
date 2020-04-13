@@ -13,6 +13,7 @@ import {
     PinDropsEditor,
     Pin2FloodPolygonsLayer,
     MaxPredictionLayer,
+    FloodPredictionLayer,
     ToggleSwitch
 } from '../';
 
@@ -155,6 +156,10 @@ const App:React.FC<Props> = ({
 
                 <MaxPredictionLayer 
                     isVisible={isMaxPredictionLayerVisible}
+                />
+
+                <FloodPredictionLayer 
+                    isVisible={isPredictionLayerVisible}
                 />
 
                 <Pin2FloodPolygonsLayer

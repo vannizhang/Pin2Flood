@@ -100,4 +100,8 @@ export const NationalWaterModelFloodPolysConfig = {
             "alias": "Stream Hydrologic Identifier"
         },
     ]
+};
+
+export const DepthContourLayerConfig = {
+    'serviceUrl': 'https://flood.arcgis.com/arcgis/rest/services/NFIE/NWM_Depth_Contours_Short/MapServer'
 }
