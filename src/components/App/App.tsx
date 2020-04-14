@@ -177,8 +177,8 @@ const App:React.FC<Props> = ({
                 webmapId={MapConfig["web-map-id"]}
             >
 
-                <PinDropsCandidateLayer 
-                    pindropCandidate={pindropCandidate}
+                <PinDropsCandidateLayer
+                    shouldResetPindropCandidate={!pindropCandidate ? true : false}
                     onSelect={(candidate)=>{
                         setPindropCandidate(candidate);
                     }}

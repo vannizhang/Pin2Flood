@@ -21,19 +21,21 @@ export interface PindropCandiate {
 }
 
 interface Props {
-    pindropCandidate:PindropCandiate;
     mapView?: IMapView;
+    shouldResetPindropCandidate?: boolean;
 
     onSelect?: (candidate:PindropCandiate)=>void;
 };
 
 const PinDropsEditingLayer:React.FC<Props> = ({
-    pindropCandidate,
     mapView,
+    shouldResetPindropCandidate,
     onSelect
 })=>{
 
     const { userData, pindropsLayer } = React.useContext(AppContext);
+
+    const [ pindropCandidate, setPindropCandidate ] = React.useState<PindropCandiate>();
 
     const showPindropCandidate = async(candidate:PindropCandiate)=>{
 
@@ -131,14 +133,40 @@ const PinDropsEditingLayer:React.FC<Props> = ({
             ObjectId: undefined
         };
 
-        onSelect(candidate);
+        setPindropCandidate(candidate);
+    };
+
+    // const updatePindropCandidateLocation = (point:IPoint)=>{
+
+    //     const { ObjectId } = pindropCandidate;
+
+    //     const candidate:PindropCandiate = {
+    //         geometry: point,
+    //         ObjectId
+    //     };
+
+    //     console.log('updatePindropLocation', candidate)
+    //     // onSelect(candidate);
+    // };
+
+    const setMapViewOnClickHandler = ()=>{
+
+        mapView.on('click', (evt)=>{
+
+            // if( pindropCandidate && pindropCandidate.ObjectId !== undefined ){
+            //     updatePindropCandidateLocation(evt.mapPoint);
+            // } else {
+            //     findPinDropCandidate(evt.mapPoint);
+            // }
+
+            findPinDropCandidate(evt.mapPoint);
+        });
+
     };
 
     React.useEffect(()=>{
         if(mapView && pindropsLayer){
-            mapView.on('click', (event)=>{
-                findPinDropCandidate(event.mapPoint);
-            });
+            setMapViewOnClickHandler();
         }
     }, [mapView, pindropsLayer]);
 
@@ -148,7 +176,9 @@ const PinDropsEditingLayer:React.FC<Props> = ({
 
             if(pindropCandidate){
                 // show pindrop candidate on map
-                showPindropCandidate(pindropCandidate)
+                showPindropCandidate(pindropCandidate);
+
+                onSelect(pindropCandidate);
             } else {
                 // remove pindrop candidate from map
                 clearAllTemporaryGraphics()
@@ -156,6 +186,13 @@ const PinDropsEditingLayer:React.FC<Props> = ({
         }
 
     }, [ pindropCandidate ]);
+
+
+    React.useEffect(()=>{
+        if(shouldResetPindropCandidate){
+            setPindropCandidate(null);
+        }
+    }, [ shouldResetPindropCandidate ]);
 
     return null;
 };
