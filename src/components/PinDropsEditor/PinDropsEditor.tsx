@@ -6,15 +6,19 @@ import {
 
 interface Props {
     pindropCandidate:PindropCandiate;
-
+    isEditingPindrop?: boolean;
     newCadidateOnAccept: ()=>void;
-    newCadidateOnReject: ()=>void;
+    rejectBtnOnClick: ()=>void;
+    deleteBtnOnClick: ()=>void;
 }
 
 const PinDropsEditor:React.FC<Props> = ({
     pindropCandidate,
+    isEditingPindrop,
+
     newCadidateOnAccept,
-    newCadidateOnReject
+    rejectBtnOnClick,
+    deleteBtnOnClick
 })=>{
 
     const getEditorCardForNewFeature = ()=>{
@@ -29,7 +33,7 @@ const PinDropsEditor:React.FC<Props> = ({
                         style={{
                             'padding': 0
                         }}
-                        onClick={newCadidateOnReject}
+                        onClick={rejectBtnOnClick}
                     >
                         <span>no</span>
                     </div>
@@ -59,7 +63,19 @@ const PinDropsEditor:React.FC<Props> = ({
 
     const getEditorCardForExistingFeature = ()=>{
         return (
-            <div></div>
+            <div className='panel panel-white trailer-half'>
+                <div>
+                    <div className='font-size-1 trailer-half'>
+                        <span className=''>Edit Pin Drop</span>
+                        <span className='icon-ui-close right cursor-pointer' onClick={rejectBtnOnClick}></span>
+                    </div>
+                    <p className="font-size--3 trailer-quarter">Click on map to select a new location for this pin drop</p>
+                </div>
+                <div className='text-right'>
+                    <span className='btn btn-transparent' onClick={deleteBtnOnClick}>delete</span>
+                    <span className='btn btn-transparent'>update</span>
+                </div>
+            </div>
         );
     };
 
@@ -69,9 +85,19 @@ const PinDropsEditor:React.FC<Props> = ({
             return null;
         }
 
-        return pindropCandidate.ObjectId === undefined
+        const editorCard = pindropCandidate.ObjectId === undefined
             ? getEditorCardForNewFeature()
             : getEditorCardForExistingFeature();
+        
+        return (
+            <div 
+                style={{
+                    'display': !isEditingPindrop ? 'block' : 'none'
+                }}
+            >
+                { editorCard }
+            </div>
+        )
     }
 
     return getEditorCard();

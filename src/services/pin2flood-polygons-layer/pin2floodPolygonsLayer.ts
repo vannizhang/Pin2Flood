@@ -3,6 +3,10 @@ import {
     addFeature
 } from '../arcgis-rest-api/addFeatures';
 
+import { 
+    deleteFeatures,
+} from '../arcgis-rest-api/deleteFeatures';
+
 import {
     Pin2FloodPolygonsLayerConfig
 } from '../../AppConfig';
@@ -62,4 +66,21 @@ export const savePin2FloodPolygon = async({
     });
 
     return addResults[0].success ? addResults[0] : null;
+};
+
+// delete pin2flood polygon using ObjectId for associated pindrop feature
+export const deletePin2FloodPolygon = async(ObjectId:number)=>{
+    const { serviceUrl, token } = Config;
+
+    const { fields } = Pin2FloodPolygonsLayerConfig;
+
+    const where = `${fields[2].fieldName}=${ObjectId}`;
+
+    const { deleteResults } = await deleteFeatures({
+        serviceUrl,
+        token,
+        where
+    });
+
+    return deleteResults[0].success ? deleteResults[0] : null;
 };

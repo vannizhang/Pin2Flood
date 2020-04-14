@@ -7,8 +7,12 @@ import {
 
 import { 
     addFeature,
-    AddFeatureResult
+    AddFeatureResult,
 } from '../arcgis-rest-api/addFeatures';
+
+import { 
+    deleteFeatures,
+} from '../arcgis-rest-api/deleteFeatures';
 
 interface savePindropOptions {
     pindropGeometry: IPoint;
@@ -61,4 +65,16 @@ export const savePindrop = async({
     });
 
     return addResults[0].success ? addResults[0] : null;
+};
+
+export const deletePindrop = async(ObjectId:number)=>{
+    const { serviceUrl, token } = Config;
+
+    const { deleteResults } = await deleteFeatures({
+        serviceUrl,
+        token,
+        ObjectId
+    });
+
+    return deleteResults[0].success ? deleteResults[0] : null;
 };

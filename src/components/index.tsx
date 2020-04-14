@@ -20,4 +20,6 @@ export { default as PinDropsCandidateLayer } from './PinDropsCandidateLayer/PinD
 
 export { default as ToggleSwitch } from './ToggleSwitch/ToggleSwitch';
 
+export { default as StatusMessage } from './StatusMessage/StatusMessage';
+
 // export { default as  } from './';

@@ -14,7 +14,8 @@ import {
     Pin2FloodPolygonsLayer,
     MaxPredictionLayer,
     FloodPredictionLayer,
-    ToggleSwitch
+    ToggleSwitch,
+    StatusMessage
 } from '../';
 
 import {
@@ -26,6 +27,10 @@ import {
 } from '../PinDropsCandidateLayer/PinDropsCandidateLayer';
 
 import {
+    EditingTaskName
+} from '../StatusMessage/StatusMessage';
+
+import {
     MapConfig,
 } from '../../AppConfig';
 
@@ -35,13 +40,17 @@ import {
 
 import {
     savePindrop,
+    deletePindrop,
     setPindropsLayerConfig
 } from '../../services/pindrops-layer/pindropsLayer';
 
 import {
     savePin2FloodPolygon,
+    deletePin2FloodPolygon,
     setPin2FloodPolygonsLayerConfig
 } from '../../services/pin2flood-polygons-layer/pin2floodPolygonsLayer';
+
+// type PindropControlAction = 'addPindrop' | 'deletePindrop' | 'updatePindrop';
 
 interface LayerInfo {
     itemId: string;
@@ -73,12 +82,12 @@ const App:React.FC<Props> = ({
 
     const [ isMaxPredictionLayerVisible, setIsMaxPredictionLayerVisible ] = React.useState<boolean>(false);
 
-    const [ isRunningPin2FloodTask, setIsRunningPin2FloodTask ] = React.useState<boolean>(false);
+    const [ activeEditingTask, setAtiveEditingTask ] = React.useState<EditingTaskName>();
 
     const newPindropOnAcceptHandler = async()=>{
         // console.log('adding new pin drop');
 
-        setIsRunningPin2FloodTask(true);
+        setAtiveEditingTask('addPindrop');
 
         try {
             const { geometry } = pindropCandidate;
@@ -119,12 +128,26 @@ const App:React.FC<Props> = ({
             console.error(err);
         }
 
-        setPindropCandidate(null);
-        setIsRunningPin2FloodTask(false);
+        setAtiveEditingTask('');
     };
 
-    const newPindropOnRejectHandler = ()=>{
-        setPindropCandidate(null);
+    const existingPindropOnDeleteHandler = async()=>{
+
+        setAtiveEditingTask('deletePindrop');
+
+        const { ObjectId } = pindropCandidate;
+
+        try {
+            const deletePindropRes = await deletePindrop(ObjectId);
+            console.log(deletePindropRes);
+    
+            const deletePin2FloodPolyRes = await deletePin2FloodPolygon(ObjectId);
+            console.log(deletePin2FloodPolyRes);
+        } catch(err){
+            console.error(err);
+        }
+
+        setAtiveEditingTask('');
     };
 
     React.useEffect(()=>{
@@ -140,6 +163,13 @@ const App:React.FC<Props> = ({
         });
 
     }, []);
+
+    // reset pindrop candidate when activeEditingTask becomes null
+    React.useEffect(()=>{
+        if(!activeEditingTask){
+            setPindropCandidate(null);
+        }
+    }, [ activeEditingTask ]);
 
     return (
         <>
@@ -171,7 +201,7 @@ const App:React.FC<Props> = ({
                     itemId={pindropsLayerInfo.itemId}
                     pastHour={pastHour}
                     popupEnabled={false}
-                    shouldRefresh={!isRunningPin2FloodTask}
+                    shouldRefresh={activeEditingTask ? false : true}
                     onUpdateEnd={setPindropFeatures}
                 />
 
@@ -186,9 +216,15 @@ const App:React.FC<Props> = ({
 
                 <PinDropsEditor 
                     pindropCandidate={pindropCandidate}
+                    isEditingPindrop={activeEditingTask ? true : false}
 
                     newCadidateOnAccept={newPindropOnAcceptHandler}
-                    newCadidateOnReject={newPindropOnRejectHandler}
+                    deleteBtnOnClick={existingPindropOnDeleteHandler}
+                    rejectBtnOnClick={setPindropCandidate.bind(this, null)}
+                />
+
+                <StatusMessage 
+                    task={activeEditingTask}
                 />
 
                 <ToggleSwitch 

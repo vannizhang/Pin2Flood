@@ -73,9 +73,12 @@ const MaxPredictionLayer:React.FC<Props> = ({
     const fetchMaxPredictionPolygons = async()=>{
 
         queryDelay = global.setTimeout(async()=>{
-            const compositeIds = await fetchCompositeIds4MaxFloodPredictionPolygons({
-                mapExtent: mapView.extent
-            });
+
+            const compositeIds = mapView.zoom >= 12 
+                ? await fetchCompositeIds4MaxFloodPredictionPolygons({
+                    mapExtent: mapView.extent
+                })
+                : []
     
             setCompositeIds(compositeIds);
 

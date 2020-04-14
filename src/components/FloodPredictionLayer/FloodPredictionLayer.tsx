@@ -61,7 +61,7 @@ const FloodPredictionLayer:React.FC<Props> = ({
             visible: isVisible
         });
 
-        mapView.map.add(layer);
+        mapView.map.add(layer, 1);
 
         setPredictionLayer(layer);
     };
