@@ -9,13 +9,14 @@ import {
     ControlPanel,
     PinDropsLayer,
     PinDropsCandidateLayer,
-    PinDropsTimeSwitcher,
+    // PinDropsTimeSwitcher,
     PinDropsEditor,
     Pin2FloodPolygonsLayer,
     MaxPredictionLayer,
     FloodPredictionLayer,
     ToggleSwitch,
-    StatusMessage
+    StatusMessage,
+    SwitcherBtnGroup
 } from '../';
 
 import {
@@ -32,6 +33,7 @@ import {
 
 import {
     MapConfig,
+    PindropTimeSwitcherData
 } from '../../AppConfig';
 
 import {
@@ -210,8 +212,13 @@ const App:React.FC<Props> = ({
             <ControlPanel 
                 title={'Pin2Flood'}
             >
-                <PinDropsTimeSwitcher 
-                    onSelect={setPastHour}
+
+                <SwitcherBtnGroup 
+                    title={'pins for last'}
+                    data={PindropTimeSwitcherData}
+                    onSelect={(val)=>{
+                        setPastHour(+val);
+                    }}
                 />
 
                 <PinDropsEditor 

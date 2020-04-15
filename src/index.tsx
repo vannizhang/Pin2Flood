@@ -14,7 +14,8 @@ import {
 } from './contexts/AppContextProvider';
 
 import {
-    App
+    App,
+    EOCApp
 } from './components';
 
 import {
@@ -98,11 +99,18 @@ const init = async()=>{
                     esriOAuthUtils={esriOAuthUtils}
                     userData={userData}
                 >
-                    <App 
-                        pindropsLayerInfo={pindropsLayerInfo}
-                        pin2floodPolygonsLayerInfo={pin2floodPolygonsLayerInfo}
-                        token={token}
-                    />
+                    {
+                        window.location.pathname === '/field' 
+                        ? <App 
+                            pindropsLayerInfo={pindropsLayerInfo}
+                            pin2floodPolygonsLayerInfo={pin2floodPolygonsLayerInfo}
+                            token={token}
+                        />
+                        : <EOCApp 
+                            pindropsLayerInfo={pindropsLayerInfo}
+                        />
+                    }
+
                 </AppContextProvider>
             ), 
             document.getElementById('root')

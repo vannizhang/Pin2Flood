@@ -104,4 +104,34 @@ export const NationalWaterModelFloodPolysConfig = {
 
 export const DepthContourLayerConfig = {
     'serviceUrl': 'https://flood.arcgis.com/arcgis/rest/services/NFIE/NWM_Depth_Contours_Short/MapServer'
-}
+};
+
+export const PindropTimeSwitcherData = [
+    {
+        'label': '1 hr',
+        'value': 1
+    },
+    {
+        'label': '2 hr',
+        'value': 2
+    },
+    {
+        'label': 'Max',
+        'value': null
+    }
+];
+
+export const PredictionTimeSwitcherData = [
+    {
+        'label': 'current',
+        'value': 0
+    },
+    {
+        'label': '6 hr',
+        'value': 5
+    },
+    {
+        'label': '12',
+        'value': 11
+    }
+];

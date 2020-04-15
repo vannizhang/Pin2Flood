@@ -44,6 +44,7 @@ const FloodPredictionLayer:React.FC<Props> = ({
         const timeValue = indexForActiveTimeValue ? timeValues[indexForActiveTimeValue] : timeValues[0];
 
         const layer = new MapImageLayer({
+            title: 'Flood Prediction',
             // URL to the map service
             url: DepthContourLayerConfig.serviceUrl,
             // dynamic sublayers. See sublayers documentation for more info

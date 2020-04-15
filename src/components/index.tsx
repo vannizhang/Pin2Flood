@@ -22,4 +22,12 @@ export { default as ToggleSwitch } from './ToggleSwitch/ToggleSwitch';
 
 export { default as StatusMessage } from './StatusMessage/StatusMessage';
 
+export { default as LocatorWidget } from './LocatorWidget/LocatorWidget'
+
+export { default as LayersListWidget } from './LayersListWidget/LayersListWidget'
+
+export { default as EOCApp} from './EocApp/EocApp';
+
+export { default as SwitcherBtnGroup } from './SwitcherBtnGroup/SwitcherBtnGroup';
+
 // export { default as  } from './';
