@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import { 
-    AppContext 
-} from '../../contexts/AppContextProvider';
+// import { 
+//     AppContext 
+// } from '../../contexts/AppContextProvider';
 
 import {
     MapView,
     ControlPanel,
     PinDropsLayer,
-    PinDropsTimeSwitcher,
+    // PinDropsTimeSwitcher,
     Pin2FloodPolygonsLayer,
     MaxPredictionLayer,
     FloodPredictionLayer,
@@ -44,8 +44,6 @@ const App:React.FC<Props> = ({
 })=>{
 
     const LayerListWidgetContainerId = 'layerListDiv';
-
-    // const { userData } = React.useContext(AppContext);
 
     const [ pastHour, setPastHour ] = React.useState<number>();
 

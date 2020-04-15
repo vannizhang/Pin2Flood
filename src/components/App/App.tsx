@@ -16,7 +16,8 @@ import {
     FloodPredictionLayer,
     ToggleSwitch,
     StatusMessage,
-    SwitcherBtnGroup
+    SwitcherBtnGroup,
+    LocatorWidget
 } from '../';
 
 import {
@@ -178,6 +179,7 @@ const App:React.FC<Props> = ({
             <MapView
                 webmapId={MapConfig["web-map-id"]}
             >
+                <LocatorWidget />
 
                 <PinDropsCandidateLayer
                     shouldResetPindropCandidate={!pindropCandidate ? true : false}
