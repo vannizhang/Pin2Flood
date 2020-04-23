@@ -57,6 +57,11 @@ const ControlPanel:React.FC<Props> = ({
     };
 
     const getToggleBtn = ()=>{
+
+        if(!isMobile){
+            return null;
+        }
+        
         return (
             <div
                 style={{

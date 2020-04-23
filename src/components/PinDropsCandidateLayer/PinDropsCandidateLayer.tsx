@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { loadModules } from 'esri-loader';
 
+import esri = __esri;
 import IMapView from 'esri/views/MapView';
 import IPoint from 'esri/geometry/Point';
 import IGraphic from 'esri/Graphic';
@@ -36,6 +37,8 @@ const PinDropsEditingLayer:React.FC<Props> = ({
     const { userData, pindropsLayer } = React.useContext(AppContext);
 
     const [ pindropCandidate, setPindropCandidate ] = React.useState<PindropCandiate>();
+
+    const [ clickEventPoint, setClickEventPoint ] = React.useState<IPoint>();
 
     const showPindropCandidate = async(candidate:PindropCandiate)=>{
 
@@ -136,32 +139,25 @@ const PinDropsEditingLayer:React.FC<Props> = ({
         setPindropCandidate(candidate);
     };
 
-    // const updatePindropCandidateLocation = (point:IPoint)=>{
+    const updatePindropCandidateLocation = (point:IPoint)=>{
 
-    //     const { ObjectId } = pindropCandidate;
+        const { ObjectId } = pindropCandidate;
 
-    //     const candidate:PindropCandiate = {
-    //         geometry: point,
-    //         ObjectId
-    //     };
+        const candidate:PindropCandiate = {
+            geometry: point,
+            ObjectId
+        };
 
-    //     console.log('updatePindropLocation', candidate)
-    //     // onSelect(candidate);
-    // };
+        // setPindropCandidate(candidate);
+
+        // console.log('updatePindropLocation', candidate);
+        // onSelect(candidate);
+    };
 
     const setMapViewOnClickHandler = ()=>{
-
         mapView.on('click', (evt)=>{
-
-            // if( pindropCandidate && pindropCandidate.ObjectId !== undefined ){
-            //     updatePindropCandidateLocation(evt.mapPoint);
-            // } else {
-            //     findPinDropCandidate(evt.mapPoint);
-            // }
-
-            findPinDropCandidate(evt.mapPoint);
+            setClickEventPoint(evt.mapPoint);
         });
-
     };
 
     React.useEffect(()=>{
@@ -187,6 +183,17 @@ const PinDropsEditingLayer:React.FC<Props> = ({
 
     }, [ pindropCandidate ]);
 
+    React.useEffect(()=>{
+
+        if(!clickEventPoint){
+            return;
+        }
+
+        ( pindropCandidate && pindropCandidate.ObjectId !== undefined ) 
+            ? updatePindropCandidateLocation(clickEventPoint)
+            : findPinDropCandidate(clickEventPoint);
+
+    }, [ clickEventPoint ]);
 
     React.useEffect(()=>{
         if(shouldResetPindropCandidate){

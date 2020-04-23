@@ -7,7 +7,7 @@
         "noImplicitAny": true,
         "preserveConstEnums": true,
         "removeComments": true,
-        "sourceMap": false,
+        "sourceMap": true,
         "target": "es5",
         "resolveJsonModule": true,
         "esModuleInterop": true ,
