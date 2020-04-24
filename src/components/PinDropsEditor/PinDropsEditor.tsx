@@ -7,7 +7,7 @@ import {
 interface Props {
     pindropCandidate:PindropCandiate;
     isEditingPindrop?: boolean;
-    newCadidateOnAccept: ()=>void;
+    cadidateOnAccept: ()=>void;
     rejectBtnOnClick: ()=>void;
     deleteBtnOnClick: ()=>void;
 }
@@ -16,7 +16,7 @@ const PinDropsEditor:React.FC<Props> = ({
     pindropCandidate,
     isEditingPindrop,
 
-    newCadidateOnAccept,
+    cadidateOnAccept,
     rejectBtnOnClick,
     deleteBtnOnClick
 })=>{
@@ -52,7 +52,7 @@ const PinDropsEditor:React.FC<Props> = ({
                         style={{
                             'padding': 0
                         }}
-                        onClick={newCadidateOnAccept}
+                        onClick={cadidateOnAccept}
                     >
                         <span>yes</span>
                     </div>
@@ -73,7 +73,7 @@ const PinDropsEditor:React.FC<Props> = ({
                 </div>
                 <div className='text-right'>
                     <span className='btn btn-transparent' onClick={deleteBtnOnClick}>delete</span>
-                    <span className='btn btn-transparent'>update</span>
+                    <span className='btn btn-transparent' onClick={cadidateOnAccept}>update</span>
                 </div>
             </div>
         );

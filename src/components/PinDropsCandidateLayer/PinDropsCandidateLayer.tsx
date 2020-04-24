@@ -148,7 +148,7 @@ const PinDropsEditingLayer:React.FC<Props> = ({
             ObjectId
         };
 
-        // setPindropCandidate(candidate);
+        setPindropCandidate(candidate);
 
         // console.log('updatePindropLocation', candidate);
         // onSelect(candidate);

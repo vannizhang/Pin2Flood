@@ -7,6 +7,11 @@ import {
     deleteFeatures,
 } from '../arcgis-rest-api/deleteFeatures';
 
+import { 
+    updateFeatures,
+    UpdateFeatureResult
+} from '../arcgis-rest-api/updateFeatures';
+
 import {
     Pin2FloodPolygonsLayerConfig
 } from '../../AppConfig';
@@ -21,6 +26,7 @@ interface savePin2FloodPolygonOptions {
         compositeId: number;
         pindropId: number;
         pindropTime: number;
+        ObjectId?: number;
     }
 }
 
@@ -44,7 +50,14 @@ export const savePin2FloodPolygon = async({
 
     const { serviceUrl, token } = Config;
 
-    const { userId, userFullName, compositeId, pindropTime, pindropId } = attributes;
+    const { 
+        userId, 
+        userFullName, 
+        compositeId, 
+        pindropTime, 
+        pindropId, 
+        ObjectId 
+    } = attributes;
 
     const { fields } = Pin2FloodPolygonsLayerConfig;
 
@@ -59,13 +72,28 @@ export const savePin2FloodPolygon = async({
         }
     };
 
-    const { addResults } = await addFeature({
-        serviceUrl,
-        token,
-        feature
-    });
+    if(ObjectId){
 
-    return addResults[0].success ? addResults[0] : null;
+        feature.attributes.ObjectId = ObjectId;
+
+        const { updateResults } = await updateFeatures({
+            serviceUrl,
+            token,
+            features: [feature]
+        });
+
+        return updateResults[0].success ? updateResults[0] : null;
+
+    } else {
+
+        const { addResults } = await addFeature({
+            serviceUrl,
+            token,
+            feature
+        });
+    
+        return addResults[0].success ? addResults[0] : null;
+    }
 };
 
 // delete pin2flood polygon using ObjectId for associated pindrop feature

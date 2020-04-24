@@ -87,13 +87,13 @@ const App:React.FC<Props> = ({
 
     const [ activeEditingTask, setAtiveEditingTask ] = React.useState<EditingTaskName>();
 
-    const newPindropOnAcceptHandler = async()=>{
+    const pindropOnAcceptHandler = async()=>{
         // console.log('adding new pin drop');
 
-        setAtiveEditingTask('addPindrop');
-
         try {
-            const { geometry } = pindropCandidate;
+            const { geometry, ObjectId } = pindropCandidate;
+
+            !ObjectId ? setAtiveEditingTask('addPindrop') : setAtiveEditingTask('updatePindrop');
 
             const pin2floodPolygon = await pin2Flood({
                 pindropGeometry: geometry
@@ -110,7 +110,8 @@ const App:React.FC<Props> = ({
                     userId: id,
                     userFullName: name,
                     compositeId: pin2floodPolygon.attributes.compositeid,
-                    pindropTime
+                    pindropTime,
+                    ObjectId
                 }
             });
             // console.log(savePindropResponse);
@@ -227,7 +228,7 @@ const App:React.FC<Props> = ({
                     pindropCandidate={pindropCandidate}
                     isEditingPindrop={activeEditingTask ? true : false}
 
-                    newCadidateOnAccept={newPindropOnAcceptHandler}
+                    cadidateOnAccept={pindropOnAcceptHandler}
                     deleteBtnOnClick={existingPindropOnDeleteHandler}
                     rejectBtnOnClick={setPindropCandidate.bind(this, null)}
                 />

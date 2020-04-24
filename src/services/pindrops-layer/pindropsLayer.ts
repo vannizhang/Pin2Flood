@@ -14,6 +14,11 @@ import {
     deleteFeatures,
 } from '../arcgis-rest-api/deleteFeatures';
 
+import { 
+    updateFeatures,
+    UpdateFeatureResult
+} from '../arcgis-rest-api/updateFeatures';
+
 interface savePindropOptions {
     pindropGeometry: IPoint;
     attributes: {
@@ -21,6 +26,7 @@ interface savePindropOptions {
         userFullName: string;
         compositeId?: number;
         pindropTime: number;
+        ObjectId?: number;
     }
 }
 
@@ -40,11 +46,17 @@ export const setPindropsLayerConfig = ({
 export const savePindrop = async({
     pindropGeometry,
     attributes
-}:savePindropOptions): Promise<AddFeatureResult>=>{
+}:savePindropOptions): Promise<AddFeatureResult | UpdateFeatureResult>=>{
     
     const { serviceUrl, token } = Config;
 
-    const { userId, userFullName, compositeId, pindropTime } = attributes;
+    const { 
+        userId, 
+        userFullName, 
+        compositeId, 
+        pindropTime, 
+        ObjectId 
+    } = attributes;
 
     const { fields } = PinDropsLayerConfig;
 
@@ -58,13 +70,30 @@ export const savePindrop = async({
         }
     };
 
-    const { addResults } = await addFeature({
-        serviceUrl,
-        token,
-        feature
-    });
+    if(ObjectId){
 
-    return addResults[0].success ? addResults[0] : null;
+        feature.attributes.ObjectId = ObjectId;
+
+        const { updateResults } = await updateFeatures({
+            serviceUrl,
+            token,
+            features: [feature]
+        });
+
+        return updateResults[0].success ? updateResults[0] : null;
+
+    } else {
+
+        const { addResults } = await addFeature({
+            serviceUrl,
+            token,
+            feature
+        });
+    
+        return addResults[0].success ? addResults[0] : null;
+    }
+
+
 };
 
 export const deletePindrop = async(ObjectId:number)=>{
