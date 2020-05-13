@@ -30,6 +30,9 @@ import {
 
 const init = async()=>{
 
+    const pathnames = window.location.pathname.split('/').filter(path=>path);
+    const isEOC = pathnames[pathnames.length - 1] === 'eoc';
+
     // make sure to use the latest version of JSAPI
     setDefaultOptions({
         version: '4.15' 
@@ -100,7 +103,7 @@ const init = async()=>{
                     userData={userData}
                 >
                     {
-                        window.location.pathname === '/field' 
+                        !isEOC
                         ? <App 
                             pindropsLayerInfo={pindropsLayerInfo}
                             pin2floodPolygonsLayerInfo={pin2floodPolygonsLayerInfo}
