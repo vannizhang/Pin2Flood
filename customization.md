@@ -47,4 +47,4 @@ To instruct the Pin2Flood app to use the App Id and items you created from previ
 
 To do this, simply replace `{APP_ID_CREATED_FROM_STEP_1}` with the App ID that you created from Step 1; replace `{ITEM_ID_FOR_PIN_DROPS_LAYER}` with the item id of the feature layer that you created using the Pin Drops template; replace `{ITEM_ID_FOR_PIN2FLOOD_POLYGONS_LAYER}` with the item id of the feature layer that you created using the Pin2Flood Polygons template.
 
-Just open the URL you created and you should be able to start using your own Pin Drops and Flood Polygon Results layers in the Pin2Flood app.
+Now you can open the URL you just made and you should be able to start using your own Pin Drops and Flood Polygon Results layers in the Pin2Flood app.
