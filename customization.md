@@ -41,10 +41,15 @@ You also need to create two Hosted Feature Layers on ArcGIS Online that the Pin2
 
 
 ### Step 3: Create App's URL with your customized items in it:
-To instruct the Pin2Flood app to use the App Id and items you created from previous steps, you will need to modify the URL below and replace the App ID (created in step 1) and Item IDs (created in step 2) with your own: 
+To instruct the Pin2Flood app to use the App Id and items you created from previous steps, you will need to modify the URL template below and replace the App ID (created in step 1) and Item IDs (created in step 2) with your own: 
 
 `https://livingatlas.arcgis.com/labs/p2fv2/field/?appId={APP_ID_CREATED_FROM_STEP_1}&pindropsItemId={ITEM_ID_FOR_PIN_DROPS_LAYER}&floodPolygonsItemId={ITEM_ID_FOR_PIN2FLOOD_POLYGONS_LAYER}`
 
 To do this, simply replace `{APP_ID_CREATED_FROM_STEP_1}` with the App ID that you created from Step 1; replace `{ITEM_ID_FOR_PIN_DROPS_LAYER}` with the item id of the feature layer that you created using the Pin Drops template; replace `{ITEM_ID_FOR_PIN2FLOOD_POLYGONS_LAYER}` with the item id of the feature layer that you created using the Pin2Flood Polygons template.
 
-Now you can open the URL you just made and you should be able to start using your own Pin Drops and Flood Polygon Results layers in the Pin2Flood app.
+You just made the customized URL for the Pin2Flood Field App, you can also create the customized URL for the **EOC app** by using a slightly diffeent URL template:
+
+`https://livingatlas.arcgis.com/labs/p2fv2/eoc/?appId={APP_ID_CREATED_FROM_STEP_1}&pindropsItemId={ITEM_ID_FOR_PIN_DROPS_LAYER}&floodPolygonsItemId={ITEM_ID_FOR_PIN2FLOOD_POLYGONS_LAYER}`
+
+Now you can open the URLs you just made and you should be able to start using your own Pin Drops and Flood Polygon Results layers in the Pin2Flood app.
+
