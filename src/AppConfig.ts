@@ -1,3 +1,11 @@
+const TIER = location.hostname === 'livingatlas.arcgis.com'
+    ? 'PROD'
+    : 'DEV'
+
+const FLOOD_SERVICE_ROOT = TIER === 'PROD'
+    ? 'https://flood.arcgis.com/arcgis/rest/services/NFIE'
+    : 'https://flooddev.arcgis.com/arcgis/rest/services/NFIE';
+
 export const Config = {
     // https://arcgis-content.maps.arcgis.com/home/item.html?id=c7490d31f52c434680edc88d2bb153bf#overview 
     'app-id': 'co1isKL7Rcyr6klX'
@@ -66,7 +74,7 @@ export const Pin2FloodPolygonsLayerConfig = {
 };
 
 export const FloodInnudationPolygonsLayerConfig = {
-    'serviceUrl': 'https://flood.arcgis.com/arcgis/rest/services/NFIE/NWM_Flood_Inundation_Polygons/MapServer/0',
+    'serviceUrl': FLOOD_SERVICE_ROOT + '/NWM_Flood_Inundation_Polygons/MapServer/0',
     'fields': [
         {
             "name": "hid",
@@ -82,7 +90,7 @@ export const FloodInnudationPolygonsLayerConfig = {
 };
 
 export const NationalWaterModelFloodPolysConfig = {
-    "serviceUrl": "https://flood.arcgis.com/arcgis/rest/services/NFIE/NationalWaterModel_FloodPolys_Short/MapServer/0",
+    "serviceUrl": FLOOD_SERVICE_ROOT + "/NationalWaterModel_FloodPolys_Short/MapServer/0",
     'fields': [
         {
             "name": "egdb.dbo.short_term_current.hid",
@@ -103,7 +111,7 @@ export const NationalWaterModelFloodPolysConfig = {
 };
 
 export const DepthContourLayerConfig = {
-    'serviceUrl': 'https://flood.arcgis.com/arcgis/rest/services/NFIE/NWM_Depth_Contours_Short/MapServer'
+    'serviceUrl': FLOOD_SERVICE_ROOT + '/NWM_Depth_Contours_Short/MapServer'
 };
 
 export const PindropTimeSwitcherData = [
