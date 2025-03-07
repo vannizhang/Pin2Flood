@@ -8,8 +8,11 @@ import IWatchUtils from 'esri/core/watchUtils';
 import IExtent from 'esri/geometry/Extent';
 import ISpatialReference from 'esri/geometry/SpatialReference';
 
+loadCss();
+
 interface Props {
     webmapId: string;
+    children: React.ReactNode;
 };
 
 const MapView:React.FC<Props> = ({
@@ -17,7 +20,7 @@ const MapView:React.FC<Props> = ({
     children
 })=>{
 
-    const mapDivRef = React.useRef<HTMLDivElement>();
+    const mapDivRef = React.useRef<HTMLDivElement>(null);
 
     const [ mapView, setMapView] = React.useState<IMapView>(null);
 
@@ -127,7 +130,7 @@ const MapView:React.FC<Props> = ({
     }
 
     React.useEffect(()=>{
-        loadCss();
+        
         initMapView();
     }, []);
 

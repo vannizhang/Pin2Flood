@@ -1,7 +1,7 @@
-import './styles/index.scss';
+import './styles/index.css';
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
 import { setDefaultOptions } from 'esri-loader';
 
@@ -95,8 +95,10 @@ const init = async()=>{
                 ? customPin2FloodPolygonsLayer.url + '/0' 
                 : Pin2FloodPolygonsLayerConfig.serviceUrl
         };
+
+        const root = createRoot(document.getElementById('root'));
     
-        ReactDOM.render(
+        root.render(
             (
                 <AppContextProvider
                     esriOAuthUtils={esriOAuthUtils}
@@ -115,8 +117,7 @@ const init = async()=>{
                     }
 
                 </AppContextProvider>
-            ), 
-            document.getElementById('root')
+            )
         );
 
     } catch(err){

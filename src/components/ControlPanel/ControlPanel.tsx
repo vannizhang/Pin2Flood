@@ -4,6 +4,7 @@ import { miscFns } from 'helper-toolkit-ts';
 
 interface Props {
     title?:string;
+    children: React.ReactNode;
 }
 const ControlPanel:React.FC<Props> = ({
     title,

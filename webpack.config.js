@@ -2,8 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports =  (env, options)=> {
 
@@ -24,47 +22,29 @@ module.exports =  (env, options)=> {
             rules: [
                 {
                     test: /\.(ts|tsx)$/,
-                    loader: 'ts-loader'
+                    loader: 'babel-loader'
                 },
                 {
-                    test: /\.s?[ac]ss$/,
+                    test: /\.css$/i,
+                    // include: path.resolve(__dirname, 'src'),
                     use: [
                         devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                         {
-                            loader: "css-loader", options: {
-                                sourceMap: true
-                            }
-                        }, {
-                            loader: 'resolve-url-loader',
-                        }, {
-                            loader: "sass-loader", options: {
+                            loader: "css-loader", 
+                            options: {
                                 sourceMap: true
                             }
                         }
                     ]
                 },
-                { test: /\.woff$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
-                { test: /\.ttf$/,  loader: "url-loader?limit=10000&mimetype=application/octet-stream" },
-                { test: /\.eot$/,  loader: "file-loader" },
-                { 
-                    test: /\.svg$/,  
-                    loader: "url-loader",
-                    options: {
-                        limit: 10000,
-                        fallback: {
-                            loader: "file-loader"
-                        }
-                    }
+                {
+                    test: /\.(woff|woff2|ttf|eot)$/,
+                    type: 'asset/resource',
                 },
-                {   
-                    test: /\.(png|jpg|gif)$/,  
-                    loader: "url-loader",
-                    options: {
-                        limit: 10000,
-                        fallback: {
-                            loader: "file-loader"
-                        }
-                    }
+
+                {
+                    test: /\.(png|jpg|gif|svg)$/,
+                    type: 'asset/resource',
                 },
             ]
         },
@@ -115,7 +95,6 @@ module.exports =  (env, options)=> {
                     useShortDoctype                : true
                 }
             }),
-            new CleanWebpackPlugin()
         ],
         optimization: {
             splitChunks: {
@@ -141,7 +120,6 @@ module.exports =  (env, options)=> {
                         }
                     }
                 }), 
-                new OptimizeCSSAssets({})
             ]
         },
     }

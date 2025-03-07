@@ -1,5 +1,5 @@
 
-import axios from 'axios';
+// import axios from 'axios';
 
 import IExtent from 'esri/geometry/Extent';
 
@@ -41,7 +41,7 @@ export const fetchCompositeIds4MaxFloodPredictionPolygons = async({
         geometryType: 'esriGeometryEnvelope',
         spatialRel: 'esriSpatialRelIntersects',
         outFields: '*',
-        returnGeometry: false,
+        returnGeometry: 'false',
         groupByFieldsForStatistics: fieldNameForStreamId,
         outStatistics: JSON.stringify([
             {
@@ -53,18 +53,27 @@ export const fetchCompositeIds4MaxFloodPredictionPolygons = async({
         f: 'json'
     };
 
-    const { data } = await axios.get(requestUrl, {
-        params
-    });
+    // const { data } = await axios.get(requestUrl, {
+    //     params
+    // });
 
-    if(!data.features || !data.features.length){
+    try {
+        const res = await fetch(requestUrl + '?' + new URLSearchParams(params));
+        const data = await res.json();
+    
+        if(!data.features || !data.features.length){
+            return [];
+        }
+    
+        const compositeIds = data.features.map((d:MaxFloodPredictionQueryResult)=>{
+            const { b_streamid, max_hid } = d.attributes;
+            return generateCompositeID(b_streamid, max_hid);
+        });
+    
+        return compositeIds;
+    } catch(err){
+        console.error(err);
+
         return [];
     }
-
-    const compositeIds = data.features.map((d:MaxFloodPredictionQueryResult)=>{
-        const { b_streamid, max_hid } = d.attributes;
-        return generateCompositeID(b_streamid, max_hid);
-    });
-
-    return compositeIds;
 };

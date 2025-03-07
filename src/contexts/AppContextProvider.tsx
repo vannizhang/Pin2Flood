@@ -21,6 +21,7 @@ interface ContextProps {
 interface AppContextProviderProps {
     esriOAuthUtils: EsriOAuth;
     userData: UserData;
+    children: React.ReactNode;
 };
 
 export const AppContext = React.createContext<ContextProps>(null);
